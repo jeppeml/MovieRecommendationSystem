@@ -6,11 +6,15 @@
 package movierecsys.gui.controller;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import movierecsys.be.Movie;
+import movierecsys.bll.OwsLogicFacade;
+import movierecsys.bll.OwsManager;
 
 /**
  *
@@ -29,13 +33,15 @@ public class MovieRecController implements Initializable
      * The TextField containing the query word.
      */
     @FXML
-    private ListView<?> lstMovies;
-
+    private ListView<Movie> lstMovies;
+    
+    private OwsLogicFacade owsfacade = new OwsManager();
 
     @Override
     public void initialize(URL url, ResourceBundle rb)
     {
-       
+       List<Movie> movies = owsfacade.searchMovies("");
+       lstMovies.getItems().addAll(movies);
         
     }
 
