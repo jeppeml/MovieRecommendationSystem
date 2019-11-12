@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 import movierecsys.be.Movie;
 import movierecsys.be.Rating;
 import movierecsys.be.User;
+import movierecsys.bll.util.MovieSearcher;
 import movierecsys.dal.MovieDAO;
 
 /**
@@ -38,8 +39,10 @@ public class OwsManager implements OwsLogicFacade{
 
     @Override
     public List<Movie> searchMovies(String query) {
+        MovieSearcher searcher = new MovieSearcher();
         try {
-            return moviedao.getAllMovies();
+            List<Movie> filteredMovies = searcher.search(moviedao.getAllMovies(), query);
+            return filteredMovies;
         } catch (IOException ex) {
             Logger.getLogger(OwsManager.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -5,6 +5,7 @@
  */
 package movierecsys.bll.util;
 
+import java.util.ArrayList;
 import java.util.List;
 import movierecsys.be.Movie;
 
@@ -12,12 +13,24 @@ import movierecsys.be.Movie;
  *
  * @author pgn
  */
-public class MovieSearcher
-{
-    public List<Movie> search(List<Movie> searchBase, String query)
-    {
-        //TODO Movie search
-        return null;
+public class MovieSearcher {
+
+    public List<Movie> search(List<Movie> searchBase, String query) {
+        // Case insensitive
+        // Partial search *sha*
+        List<Movie> filtered = new ArrayList<>();
+
+        if (query.isEmpty()) {
+            return searchBase;
+        }
+
+        for (Movie movie : searchBase) {
+            if (movie.getTitle().toLowerCase().contains(query.toLowerCase())) {
+                filtered.add(movie);
+            }
+        }
+
+        return filtered;
     }
-    
+
 }

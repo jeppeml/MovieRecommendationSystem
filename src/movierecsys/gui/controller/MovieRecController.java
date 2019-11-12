@@ -40,9 +40,9 @@ public class MovieRecController implements Initializable
     @Override
     public void initialize(URL url, ResourceBundle rb)
     {
-       List<Movie> movies = owsfacade.searchMovies("");
+       List<Movie> movies = owsfacade.searchMovies("din");
+       lstMovies.getItems().clear();
        lstMovies.getItems().addAll(movies);
-        
     }
 
 }
