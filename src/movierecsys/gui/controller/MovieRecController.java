@@ -20,29 +20,34 @@ import movierecsys.bll.OwsManager;
  *
  * @author pgn
  */
-public class MovieRecController implements Initializable
-{
+public class MovieRecController implements Initializable {
 
     /**
      * The TextField containing the URL of the targeted website.
      */
     @FXML
-    private TextField txtMovieSearcjh;
+    private TextField txtMovieSearch;
 
     /**
      * The TextField containing the query word.
      */
     @FXML
     private ListView<Movie> lstMovies;
-    
+
     private OwsLogicFacade owsfacade = new OwsManager();
 
     @Override
-    public void initialize(URL url, ResourceBundle rb)
-    {
-       List<Movie> movies = owsfacade.searchMovies("din");
-       lstMovies.getItems().clear();
-       lstMovies.getItems().addAll(movies);
+    public void initialize(URL url, ResourceBundle rb) {
+        txtMovieSearch.textProperty().addListener((obs, oldVal, newVal) -> {
+            updateList(newVal);
+        });
+        updateList("");
+    }
+
+    private void updateList(String searchQuery) {
+        List<Movie> movies = owsfacade.searchMovies(searchQuery);
+        lstMovies.getItems().clear();
+        lstMovies.getItems().addAll(movies);
     }
 
 }
