@@ -6,23 +6,56 @@
 package movierecsys.dal;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import movierecsys.be.Movie;
 
 /**
  *
- * @author pgn
+ * @author pgn, jle
  */
 public class MovieDAO
 {
+    public static void main(String[] args) {
+        System.out.println("Hello world!");
+        
+        MovieDAO dao = new MovieDAO();
+        //dao.createMovie(2019, "Joker");
+        System.out.println("Movie: " + dao.getMovie(1).getTitle());
+        
+    }
 
     private static final String MOVIE_SOURCE = "data/movie_titles.txt";
+/*
+    private void clearAll() throws IOException {
+        // Ereases the content of the file without deleting it.
+        RandomAccessFile raf = new RandomAccessFile(MOVIE_SOURCE, "rw");
+        raf.setLength(0);
+    }
+    
+    private void saveAll(List<Movie> movies) throws IOException {
+        clearAll(); // deletes contents of file
+        
+        try (BufferedWriter bw
+                = new BufferedWriter(
+                        new FileWriter(fileName, true))) {
+            for (Department dept : depts) {
 
+                bw.append(dept.getId() + "," + dept.getName());
+                bw.newLine();
+            }
+        }
+    }*/
+    
     /**
      * Gets a list of all movies in the persistence storage.
      *
@@ -82,7 +115,15 @@ public class MovieDAO
      */
     private Movie createMovie(int releaseYear, String title)
     {
-        //TODO Create movie.
+        int id = getNextAvailableId();
+        try (BufferedWriter bw
+                = new BufferedWriter(
+                        new FileWriter(MOVIE_SOURCE, true))) {
+            bw.append(id + "," + releaseYear + "," + title);
+            bw.newLine();
+        } catch (IOException ex) {
+            Logger.getLogger(MovieDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return null;
     }
 
@@ -115,8 +156,36 @@ public class MovieDAO
      */
     private Movie getMovie(int id)
     {
-        //TODO Get one Movie
-        return null;
+        try {
+            List<Movie> movies = getAllMovies();
+            
+            for (Movie movie : movies) {
+                if(id==movie.getId())
+                    return movie;
+            }
+            
+        } catch (IOException ex) {
+            Logger.getLogger(MovieDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null; // Movie not found
+    }
+
+    private int getNextAvailableId() {
+        try {
+            List<Movie> movies = getAllMovies();
+            int largestId = -1;
+            
+            for (Movie movie : movies) {
+                if(largestId<movie.getId())
+                    largestId = movie.getId();
+            }
+            
+            return largestId + 1;
+            
+        } catch (IOException ex) {
+            Logger.getLogger(MovieDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return -1; // Something is rotten
     }
 
 }
