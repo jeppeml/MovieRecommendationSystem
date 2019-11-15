@@ -5,17 +5,10 @@
  */
 package movierecsys.dal;
 
-import java.io.BufferedWriter;
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.StandardOpenOption;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.stream.Stream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import movierecsys.be.Movie;
 
 /**
@@ -33,14 +26,28 @@ public class FileReaderTester
      */
     public static void main(String[] args) throws IOException
     {
-        MovieDAO movieDao = new MovieDAO();
-        List<Movie> allMovs = movieDao.getAllMovies();
-        for (Movie allMov : allMovs)
-        {
-            System.out.println(allMov.getTitle());
+        FileReaderTester test = new FileReaderTester();
+        test.testGetAllMovies();
+        test.testGetOneMovie();
+    }
+    
+    public void testGetAllMovies(){
+        try {
+            MovieDAO movieDao = new MovieDAO();
+            List<Movie> allMovs = movieDao.getAllMovies();
+            for (Movie allMov : allMovs)
+            {
+                System.out.println(allMov.getTitle());
+            }
+            System.out.println("Movie count: " + allMovs.size());
+        } catch (IOException ex) {
+            Logger.getLogger(FileReaderTester.class.getName()).log(Level.SEVERE, null, ex);
         }
-        System.out.println("Movie count: " + allMovs.size());
     }
 
-   
+   public void testGetOneMovie(){
+        MovieDAO movieDao = new MovieDAO();
+       System.out.println("Looking for movie id 45");
+       System.out.println("Movie 45:" + movieDao.getMovie(45));
+   }
 }

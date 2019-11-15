@@ -30,12 +30,19 @@ public class MovieDAO
         
         MovieDAO dao = new MovieDAO();
         //dao.createMovie(2019, "Joker");
-        System.out.println("Movie: " + dao.getMovie(1).getTitle());
+        Movie movie3 = dao.getMovie(3);
+        System.out.println("Movie: " + movie3.getTitle());
+        movie3.setTitle("Character");
+        
+        //dao.deleteMovie(movie2);
+        dao.updateMovie(movie3);
+        
+        System.out.println("Movie: " + dao.getMovie(3));
         
     }
 
     private static final String MOVIE_SOURCE = "data/movie_titles.txt";
-/*
+
     private void clearAll() throws IOException {
         // Ereases the content of the file without deleting it.
         RandomAccessFile raf = new RandomAccessFile(MOVIE_SOURCE, "rw");
@@ -47,14 +54,14 @@ public class MovieDAO
         
         try (BufferedWriter bw
                 = new BufferedWriter(
-                        new FileWriter(fileName, true))) {
-            for (Department dept : depts) {
+                        new FileWriter(MOVIE_SOURCE, true))) {
+            for (Movie movie : movies) {
 
-                bw.append(dept.getId() + "," + dept.getName());
+                bw.append(movie.getId() + "," + movie.getYear() + "," + movie.getTitle());
                 bw.newLine();
             }
         }
-    }*/
+    }
     
     /**
      * Gets a list of all movies in the persistence storage.
@@ -113,7 +120,7 @@ public class MovieDAO
      * @return The object representation of the movie added to the persistence
      * storage.
      */
-    private Movie createMovie(int releaseYear, String title)
+    public Movie createMovie(int releaseYear, String title)
     {
         int id = getNextAvailableId();
         try (BufferedWriter bw
@@ -132,9 +139,25 @@ public class MovieDAO
      *
      * @param movie The movie to delete.
      */
-    private void deleteMovie(Movie movie)
+    public void deleteMovie(Movie movie)
     {
-        //TODO Delete movie
+        try {
+            List<Movie> allMovies = getAllMovies();
+            Movie movieToRemove = null;
+            for (Movie m : allMovies) {
+                if(movie.getId()==m.getId())
+                    movieToRemove = m;
+            }
+            
+            if(movieToRemove!=null)
+                allMovies.remove(movieToRemove);
+            
+            saveAll(allMovies);
+            
+        } catch (IOException ex) {
+            Logger.getLogger(MovieDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
 
     /**
@@ -143,9 +166,25 @@ public class MovieDAO
      *
      * @param movie The updated movie.
      */
-    private void updateMovie(Movie movie)
+    public void updateMovie(Movie movie)
     {
-        //TODO Update movies
+        try {
+            List<Movie> allMovies = getAllMovies();
+            Movie movieToUpdate = null;
+            for (Movie m : allMovies) {
+                if(movie.getId()==m.getId())
+                    movieToUpdate = m;
+            }
+            
+            if(movieToUpdate!=null){
+                movieToUpdate.setTitle(movie.getTitle());
+                movieToUpdate.setYear(movie.getYear());
+            }
+            saveAll(allMovies);
+            
+        } catch (IOException ex) {
+            Logger.getLogger(MovieDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -154,7 +193,7 @@ public class MovieDAO
      * @param id ID of the movie.
      * @return A Movie object.
      */
-    private Movie getMovie(int id)
+    public Movie getMovie(int id)
     {
         try {
             List<Movie> movies = getAllMovies();
