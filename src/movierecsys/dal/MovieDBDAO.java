@@ -18,7 +18,7 @@ import movierecsys.be.Movie;
  *
  * @author jeppjleemoritzled
  */
-public class MovieDBDAO {
+public class MovieDBDAO implements MovieDAOFacade {
     private SQLServerDataSource ds;
     
     public static void main(String[] args) {
@@ -28,7 +28,7 @@ public class MovieDBDAO {
             List<Movie> movies = fileDAO.getAllMovies();
             
             for (Movie movie : movies) {
-                dao.createMovie(movie.getId(), movie.getYear(), movie.getTitle());
+               // dao.createMovie(movie.getId(), movie.getYear(), movie.getTitle());
             }
             
         } catch (IOException ex) {
@@ -85,5 +85,25 @@ public class MovieDBDAO {
             Logger.getLogger(MovieDBDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+
+    @Override
+    public List<Movie> getAllMovies() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void deleteMovie(Movie movie) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void updateMovie(Movie movie) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Movie getMovie(int id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

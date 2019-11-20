@@ -23,7 +23,7 @@ import movierecsys.be.Movie;
  *
  * @author pgn, jle
  */
-public class MovieDAO
+public class MovieDAO implements MovieDAOFacade
 {
     public static void main(String[] args) {
         System.out.println("Hello world!");
@@ -69,7 +69,7 @@ public class MovieDAO
      * @return List of movies.
      * @throws java.io.FileNotFoundException
      */
-    public List<Movie> getAllMovies() throws FileNotFoundException, IOException
+    public List<Movie> getAllMovies() 
     {
         List<Movie> allMovies = new ArrayList<>();
         File file = new File(MOVIE_SOURCE);
@@ -89,6 +89,10 @@ public class MovieDAO
                     //In a perfect world you should at least log the incident.
                 }
             }
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(MovieDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(MovieDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return allMovies;
     }
@@ -195,7 +199,7 @@ public class MovieDAO
      */
     public Movie getMovie(int id)
     {
-        try {
+       
             List<Movie> movies = getAllMovies();
             
             for (Movie movie : movies) {
@@ -203,14 +207,12 @@ public class MovieDAO
                     return movie;
             }
             
-        } catch (IOException ex) {
-            Logger.getLogger(MovieDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        
         return null; // Movie not found
     }
 
     private int getNextAvailableId() {
-        try {
+        
             List<Movie> movies = getAllMovies();
             int largestId = -1;
             
@@ -221,10 +223,7 @@ public class MovieDAO
             
             return largestId + 1;
             
-        } catch (IOException ex) {
-            Logger.getLogger(MovieDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return -1; // Something is rotten
+        
     }
 
 }
