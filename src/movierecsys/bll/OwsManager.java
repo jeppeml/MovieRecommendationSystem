@@ -14,13 +14,15 @@ import movierecsys.be.Rating;
 import movierecsys.be.User;
 import movierecsys.bll.util.MovieSearcher;
 import movierecsys.dal.MovieDAO;
+import movierecsys.dal.MovieDAOFacade;
+import movierecsys.dal.MovieDBDAO;
 
 /**
  *
  * @author jeppjleemoritzled
  */
 public class OwsManager implements OwsLogicFacade{
-    private MovieDAO moviedao = new MovieDAO();
+    private MovieDAOFacade moviedao = new MovieDBDAO();
     
     @Override
     public List<Rating> getRecommendedMovies(User user) {
@@ -40,13 +42,10 @@ public class OwsManager implements OwsLogicFacade{
     @Override
     public List<Movie> searchMovies(String query) {
         MovieSearcher searcher = new MovieSearcher();
-        try {
+      
             List<Movie> filteredMovies = searcher.search(moviedao.getAllMovies(), query);
             return filteredMovies;
-        } catch (IOException ex) {
-            Logger.getLogger(OwsManager.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
+        
     }
 
     @Override

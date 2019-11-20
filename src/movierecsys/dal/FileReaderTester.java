@@ -15,8 +15,7 @@ import movierecsys.be.Movie;
  *
  * @author pgn
  */
-public class FileReaderTester
-{
+public class FileReaderTester {
 
     /**
      * Example method. This is the code I used to create the users.txt files.
@@ -24,30 +23,26 @@ public class FileReaderTester
      * @param args
      * @throws IOException
      */
-    public static void main(String[] args) throws IOException
-    {
+    public static void main(String[] args) throws IOException {
         FileReaderTester test = new FileReaderTester();
         test.testGetAllMovies();
         test.testGetOneMovie();
     }
-    
-    public void testGetAllMovies(){
-        try {
-            MovieDAO movieDao = new MovieDAO();
-            List<Movie> allMovs = movieDao.getAllMovies();
-            for (Movie allMov : allMovs)
-            {
-                System.out.println(allMov.getTitle());
-            }
-            System.out.println("Movie count: " + allMovs.size());
-        } catch (IOException ex) {
-            Logger.getLogger(FileReaderTester.class.getName()).log(Level.SEVERE, null, ex);
+
+    public void testGetAllMovies() {
+
+        MovieDAO movieDao = new MovieDAO();
+        List<Movie> allMovs = movieDao.getAllMovies();
+        for (Movie allMov : allMovs) {
+            System.out.println(allMov.getTitle());
         }
+        System.out.println("Movie count: " + allMovs.size());
+
     }
 
-   public void testGetOneMovie(){
+    public void testGetOneMovie() {
         MovieDAO movieDao = new MovieDAO();
-       System.out.println("Looking for movie id 45");
-       System.out.println("Movie 45:" + movieDao.getMovie(45));
-   }
+        System.out.println("Looking for movie id 45");
+        System.out.println("Movie 45:" + movieDao.getMovie(45));
+    }
 }
